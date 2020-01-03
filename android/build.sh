@@ -212,13 +212,14 @@ accept_images() {
 }
 
 run_tests() {
-	SIZE=$1
 	run_adb_as_root
 	install_test_butler
 	uninstall_apk
 	install_apk
 	install_test_apk
-	run_instrumented_tests $SIZE
+	for size in $*; do
+		run_instrumented_tests $size
+	done
 	parse_instrumentation_results
 	fetch_logcat
 	uninstall_test_apk
@@ -282,7 +283,7 @@ case "$1" in
 
 	large-tests)
 		shift; parse_opts $*
-		run_tests large
+		run_tests medium large
  		;;
 
 	fetch-images)
